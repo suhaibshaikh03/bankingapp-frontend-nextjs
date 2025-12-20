@@ -35,8 +35,8 @@ const Features: React.FC = () => {
               <p className="text-white text-sm leading-relaxed mb-6">
                 {descriptionText}
               </p>
-              <button className="bg-white text-gray-800 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 transition-colors duration-300">
-                Learn more..
+              <button className="bg-white text-gray-800 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-blue-700 hover:text-white transition-all duration-300 transform hover:scale-105">
+                Learn More
               </button>
             </div>
           </div>
