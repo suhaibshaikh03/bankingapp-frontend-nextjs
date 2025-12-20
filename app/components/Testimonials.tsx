@@ -38,7 +38,7 @@ const Testimonials: React.FC = () => {
         <div className="scrolling-wrapper">
           <div className="scrolling-content">
             {duplicatedTestimonials.map((testimonial, index) => (
-              <div key={index} className="testimonial-card flex-shrink-0 w-80 bg-white p-6 rounded-lg shadow-md mx-4">
+              <div key={index} className="testimonial-card flex-shrink-0 w-80 bg-blue-100 p-6 rounded-lg shadow-xl border border-blue-200 transition-all duration-300 hover:scale-105 mx-4">
                 <p className="text-gray-600 italic mb-4">"{testimonial.quote}"</p>
                 <p className="text-right font-semibold text-blue-500">- {testimonial.author}</p>
               </div>
