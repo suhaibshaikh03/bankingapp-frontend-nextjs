@@ -42,8 +42,6 @@ const Features: React.FC = () => {
           </div>
         ))}
       </div>
-      {/* Bottom Accent Bar */}
-      <div className="w-full h-10 bg-yellow-400"></div>
     </section>
   );
 };
