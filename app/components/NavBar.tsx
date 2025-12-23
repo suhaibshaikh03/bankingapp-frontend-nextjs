@@ -111,21 +111,16 @@ function NavBar(){
                         <Button text="Login" asLink={true} href="/login" className="text-white bg-[#00008B] hover:bg-blue-700 font-medium w-full py-2 px-3 rounded-md ml-0.5" />
                       </div>
                       {menuItems.filter(item => item.text !== "Login").map((item, index) => (
-                        <div key={index} className="pb-1">
-                          <div className="flex items-center w-full">
-                            <Button
-                              text={item.text}
-                              asLink={!!item.href}
-                              href={item.href}
-                              className={`flex-1 text-left font-medium py-2 px-3 rounded-md ${item.href ? 'hover:text-white hover:bg-[#00008B]' : 'cursor-pointer hover:text-white hover:bg-[#00008B]'}`}
-                            />
-                            {item.subItems && (
-                              <div className="ml-1 p-1 rounded-md hover:bg-gray-200 transition-colors">
+                        item.subItems ? (
+                          <details key={index} className="pb-1 group">
+                            <summary className="flex items-center w-full list-none cursor-pointer">
+                              <span className={`flex-1 text-left font-medium py-2 px-3 rounded-md ${item.href ? 'hover:text-white hover:bg-[#00008B]' : 'cursor-pointer hover:text-white hover:bg-[#00008B]'}`}>
+                                {item.text}
+                              </span>
+                              <div className="ml-1 p-1 rounded-md hover:bg-gray-200 transition-colors group-open:rotate-180 transition-transform duration-200">
                                 <ChevronDown className="h-5 w-5 text-gray-600" />
                               </div>
-                            )}
-                          </div>
-                          {item.subItems && (
+                            </summary>
                             <div className="ml-4 mt-1 flex flex-col space-y-1">
                               {item.subItems.map((subItem, subIndex) => (
                                 <Button
@@ -137,8 +132,19 @@ function NavBar(){
                                 />
                               ))}
                             </div>
-                          )}
-                        </div>
+                          </details>
+                        ) : (
+                          <div key={index} className="pb-1">
+                            <div className="flex items-center w-full">
+                              <Button
+                                text={item.text}
+                                asLink={!!item.href}
+                                href={item.href}
+                                className={`flex-1 text-left font-medium py-2 px-3 rounded-md ${item.href ? 'hover:text-white hover:bg-[#00008B]' : 'cursor-pointer hover:text-white hover:bg-[#00008B]'}`}
+                              />
+                            </div>
+                          </div>
+                        )
                       ))}
                     </div>
                   </SheetContent>
