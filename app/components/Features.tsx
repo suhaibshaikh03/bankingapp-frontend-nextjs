@@ -1,21 +1,31 @@
 // app/components/Features.tsx
 import React from 'react';
+import Link from 'next/link';
 
 const Features: React.FC = () => {
   const descriptionText = 'There is a variety of saving plans which can be tailored to your needs, including: Tax Exempt Savings Regular Savings.';
 
-  const featureCards = [
+  type FeatureCard = {
+    title: string;
+    bgColor: string;
+    route: string;
+  };
+
+  const featureCards: FeatureCard[] = [
     {
       title: 'Loan Scheme',
       bgColor: 'bg-[#87CEFA]', // Light Sky Blue
+      route: '/banking/loan',
     },
     {
       title: 'Deposit Scheme',
       bgColor: 'bg-[#87CEEB]', // Lighter Blue
+      route: '/banking/deposit',
     },
     {
       title: 'Payment Bill',
       bgColor: 'bg-[#00BFFF]', // Deep Sky Blue
+      route: '/payments/bill-payment',
     },
   ];
 
@@ -34,9 +44,9 @@ const Features: React.FC = () => {
               <p className="text-white text-xs md:text-sm leading-relaxed mb-4 md:mb-6">
                 {descriptionText}
               </p>
-              <button className="bg-white text-gray-800 font-semibold py-2 px-6 rounded-full shadow-lg hover:bg-blue-700 hover:text-white transition-all duration-300 transform hover:scale-105">
+              <Link href={card.route} className="bg-white text-gray-800 font-semibold py-2 px-6 rounded-full shadow-lg hover:bg-blue-700 hover:text-white transition-all duration-300 transform hover:scale-105">
                 Learn More
-              </button>
+              </Link>
             </div>
           </div>
         ))}
