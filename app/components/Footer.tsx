@@ -83,7 +83,9 @@ const Footer = () => {
             <h4 className="text-sm font-bold text-gray-800 mb-2">Connect</h4>
             <div className="flex space-x-5 text-xl text-gray-400">
               <FaYoutube className="hover:text-[#00008B] cursor-pointer transition-colors" />
-              <FaLinkedinIn className="hover:text-[#00008B] cursor-pointer transition-colors" />
+              <a href="https://www.linkedin.com/in/suhaib-shaikh-4159612b2" target="_blank" rel="noopener noreferrer">
+                <FaLinkedinIn className="hover:text-[#00008B] cursor-pointer transition-colors" />
+              </a>
               <FaInstagram className="hover:text-[#00008B] cursor-pointer transition-colors" />
               <FaFacebookF className="hover:text-[#00008B] cursor-pointer transition-colors" />
             </div>
