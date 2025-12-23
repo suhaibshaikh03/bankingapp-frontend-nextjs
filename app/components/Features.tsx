@@ -21,21 +21,20 @@ const Features: React.FC = () => {
 
   return (
     <section className="w-full flex flex-col">
-      <div className="flex flex-col md:flex-row w-full min-h-[500px] max-h-[600px]">
+      <div className="flex flex-col md:flex-row w-full">
         {featureCards.map((card, index) => (
           <div
             key={index}
-            className={`flex-1 ${card.bgColor} flex items-center justify-center p-4 text-center`}
-            style={{ height: '500px' }} // Fixed height as per requirement
+            className={`flex-1 ${card.bgColor} flex items-center justify-center p-4 text-center min-h-[300px] md:min-h-[500px]`}
           >
-            <div className="flex flex-col items-center justify-center h-full max-w-xs space-y-4">
-              <h2 className="text-white text-4xl font-semibold mb-4">
+            <div className="flex flex-col items-center justify-center w-full max-w-xs space-y-4">
+              <h2 className="text-white text-2xl md:text-4xl font-semibold mb-2 md:mb-4">
                 {card.title}
               </h2>
-              <p className="text-white text-sm leading-relaxed mb-6">
+              <p className="text-white text-xs md:text-sm leading-relaxed mb-4 md:mb-6">
                 {descriptionText}
               </p>
-              <button className="bg-white text-gray-800 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-blue-700 hover:text-white transition-all duration-300 transform hover:scale-105">
+              <button className="bg-white text-gray-800 font-semibold py-2 px-6 rounded-full shadow-lg hover:bg-blue-700 hover:text-white transition-all duration-300 transform hover:scale-105">
                 Learn More
               </button>
             </div>
