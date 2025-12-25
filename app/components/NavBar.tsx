@@ -12,7 +12,11 @@ import {
   SheetTrigger,
 } from "@/app/components/ui/sheet"
 
-function NavBar(){
+interface NavBarProps {
+  setIsDropdownHovered?: (isHovered: boolean) => void;
+}
+
+function NavBar({ setIsDropdownHovered }: NavBarProps){
     const menuItems = [
       { text: "Home", href: "/" },
       {
@@ -44,6 +48,20 @@ function NavBar(){
       { text: "Login", href: "/login" }
     ];
 
+    // Function to handle mouse enter for dropdown buttons
+    const handleDropdownMouseEnter = (text: string) => {
+      if (setIsDropdownHovered && (text === "Banking" || text === "Transfers" || text === "Payments")) {
+        setIsDropdownHovered(true);
+      }
+    };
+
+    // Function to handle mouse leave for dropdown buttons
+    const handleDropdownMouseLeave = (text: string) => {
+      if (setIsDropdownHovered && (text === "Banking" || text === "Transfers" || text === "Payments")) {
+        setIsDropdownHovered(false);
+      }
+    };
+
     return(
              <nav className="flex items-center justify-between w-full px-4 py-1 shadow-md relative">
              {/* LOGO */}
@@ -54,7 +72,11 @@ function NavBar(){
               <div className="hidden md:flex-grow md:flex items-center justify-center">
                 <ul className="flex items-center justify-center space-x-8">
                     <li className="text-lg font-medium"><Button text="Home" asLink={true} href="/" className="hover:text-white hover:bg-[#00008B] transition-colors duration-200" /></li>
-                    <li className="text-lg relative group py-1 px-1">
+                    <li
+                      className="text-lg relative group py-1 px-1"
+                      onMouseEnter={() => handleDropdownMouseEnter("Banking")}
+                      onMouseLeave={() => handleDropdownMouseLeave("Banking")}
+                    >
                       <div className="relative">
                         <Button text="Banking" asLink={true} href="/banking" className="cursor-pointer hover:text-white hover:bg-[#00008B] transition-colors duration-200 font-medium" />
 
@@ -65,7 +87,11 @@ function NavBar(){
                         </ul>
                       </div>
                     </li>
-                    <li className="text-lg relative group py-1 px-1">
+                    <li
+                      className="text-lg relative group py-1 px-1"
+                      onMouseEnter={() => handleDropdownMouseEnter("Transfers")}
+                      onMouseLeave={() => handleDropdownMouseLeave("Transfers")}
+                    >
                       <div className="relative">
                         <Button text="Transfers" asLink={true} href="/transfers" className="cursor-pointer hover:text-white hover:bg-[#00008B] transition-colors duration-200 font-medium" />
 
@@ -75,7 +101,11 @@ function NavBar(){
                         </ul>
                       </div>
                     </li>
-                    <li className="text-lg relative group py-1 px-1">
+                    <li
+                      className="text-lg relative group py-1 px-1"
+                      onMouseEnter={() => handleDropdownMouseEnter("Payments")}
+                      onMouseLeave={() => handleDropdownMouseLeave("Payments")}
+                    >
                       <div className="relative">
                         <Button text="Payments" asLink={true} href="/payments" className="cursor-pointer hover:text-white hover:bg-[#00008B] transition-colors duration-200 font-medium" />
 
