@@ -14,7 +14,7 @@ const StaggeredCardGrid: React.FC<StaggeredCardGridProps> = ({ children, classNa
   const isInView = useInView(ref, { once: false, margin: '-100px' });
 
   return (
-    <div ref={ref} className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 ${className}`}>
+    <div ref={ref} className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 ${className} w-full max-w-full overflow-x-hidden`}>
       {children.map((child, index) => {
         // Determine animation direction based on index
         const isLeft = index < 2; // First two cards come from left
@@ -25,6 +25,7 @@ const StaggeredCardGrid: React.FC<StaggeredCardGridProps> = ({ children, classNa
             initial={{ opacity: 0, x: isLeft ? -100 : 100 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: isLeft ? -100 : 100 }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
+            className="w-full"
           >
             {child}
           </motion.div>

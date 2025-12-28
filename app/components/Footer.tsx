@@ -4,25 +4,25 @@ import { FaYoutube, FaLinkedinIn, FaInstagram, FaFacebookF, FaApple, FaGooglePla
 
 const Footer = () => {
   return (
-    <footer className="relative bg-white text-gray-800 pt-16 pb-8 px-6 md:px-12 lg:px-20 overflow-hidden shadow-[0_-8px_30px_rgb(0,0,0,0.06)] border-t border-gray-100">
-      
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-        
+    <footer className="relative bg-white text-gray-800 pt-16 pb-8 px-6 md:px-12 lg:px-20 overflow-x-hidden shadow-[0_-8px_30px_rgb(0,0,0,0.06)] border-t border-gray-100">
+
+      {/* Vertical "Support" Button - Blue Hover Effect - positioned outside grid to avoid overflow issues */}
+      <div className="hidden xl:block absolute -left-16 top-16 z-10">
+        <button className="origin-top-left -rotate-90 px-6 py-2 border border-[#00008B] text-[#00008B] text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-[#00008B] hover:text-white transition-all duration-300 rounded-b-md">
+          Help Desk
+        </button>
+      </div>
+
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 overflow-hidden">
+
         {/* Left Section: Brand & Support Button */}
         <div className="relative">
-          {/* Vertical "Support" Button - Blue Hover Effect */}
-          <div className="absolute -left-16 top-0 hidden xl:block">
-            <button className="origin-top-left -rotate-90 translate-y-32 px-6 py-2 border border-[#00008B] text-[#00008B] text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-[#00008B] hover:text-white transition-all duration-300 rounded-b-md">
-              Help Desk
-            </button>
-          </div>
-
           <div className="space-y-6">
             <Image src="/logo.png" alt="S2Pay Logo" width={110} height={40} className="object-contain" />
             <p className="text-sm text-gray-500 leading-relaxed">
               Your trusted partner in digital finance. Secure, fast, and transparent banking for the modern world.
             </p>
-            
+
             <div className="space-y-3 pt-2">
               <h4 className="text-[#00008B] font-bold uppercase text-[10px] tracking-widest">Download S2Pay App</h4>
               <div className="flex flex-col gap-2">

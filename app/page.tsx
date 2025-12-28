@@ -6,7 +6,7 @@ import Testimonials from "./components/Testimonials";
 
 export default function Home() {
   return (
-    <main className="flex flex-col">
+    <main className="flex flex-col overflow-x-hidden">
       <Features />
       <WhyChooseUs />
       <LiveStatistics />

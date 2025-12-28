@@ -58,6 +58,7 @@
 .scrolling-content {
   display: flex;
   animation: scroll 40s linear infinite;
+  width: max-content;
 }
 
 @keyframes scroll {
@@ -67,6 +68,11 @@
   to {
     transform: translateX(-50%);
   }
+}
+
+/* Additional overflow prevention */
+.testimonial-card {
+  min-width: 20rem; /* w-80 = 20rem */
 }
 
 :root {

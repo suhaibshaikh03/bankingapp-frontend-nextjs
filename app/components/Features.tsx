@@ -31,11 +31,11 @@ const Features: React.FC = () => {
 
   return (
     <section className="w-full flex flex-col">
-      <div className="flex flex-col md:flex-row w-full">
+      <div className="flex flex-col md:flex-row w-full overflow-hidden">
         {featureCards.map((card, index) => (
           <div
             key={index}
-            className={`flex-1 ${card.bgColor} flex items-center justify-center p-4 text-center min-h-[300px] md:min-h-[500px]`}
+            className={`flex-1 ${card.bgColor} flex items-center justify-center p-4 text-center min-h-[300px] md:min-h-[500px] min-w-0`}
           >
             <div className="flex flex-col items-center justify-center w-full max-w-xs space-y-4">
               <h2 className="text-white text-2xl md:text-4xl font-semibold mb-2 md:mb-4">
