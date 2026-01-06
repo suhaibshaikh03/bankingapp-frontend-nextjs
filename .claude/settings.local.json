@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(dir \".claude\\\\skills\" /AD /B)",
-      "Skill(nextjs-skill)"
+      "Skill(nextjs-skill)",
+      "Bash(dir \"src\\\\app\" /s)",
+      "Bash(npm install --save-dev cross-env)",
+      "Bash(npm run dev)"
     ]
   }
 }
