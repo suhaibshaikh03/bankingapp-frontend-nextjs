@@ -3,10 +3,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { apiClient } from '@/lib/api';
+import { useAuth } from '../../components/auth/AuthProvider';
 
 const LoginForm = () => {
   const router = useRouter();
-  const [email, setEmail] = useState('');
+  const { login } = useAuth(); // Use the existing auth context
+  // Change from email to username since the backend uses username
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -15,10 +19,8 @@ const LoginForm = () => {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!email) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = 'Email is invalid';
+    if (!username) {
+      newErrors.username = 'Username is required';
     }
 
     if (!password) {
@@ -41,16 +43,18 @@ const LoginForm = () => {
     setIsLoading(true);
 
     try {
-      // In a real app, this would be an API call to your backend
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Use the API client to login with username and password
+      const { access_token, token_type } = await apiClient.login(username, password);
 
-      // For demo purposes, we'll just redirect to dashboard or home
-      router.push('/'); // or wherever you want to redirect after login
+      // Login successful, update auth context
+      await login({ accessToken: access_token });
+
+      // Redirect to banking history page after login
+      router.push('/banking/history');
       router.refresh();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login error:', error);
-      setErrors({ submit: 'Invalid email or password. Please try again.' });
+      setErrors({ submit: error.message || 'Invalid username or password. Please try again.' });
     } finally {
       setIsLoading(false);
     }
@@ -66,22 +70,22 @@ const LoginForm = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-              Email Address
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+              Username
             </label>
             <input
-              id="email"
-              name="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id="username"
+              name="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition ${
-                errors.email ? 'border-red-500' : 'border-gray-300'
+                errors.username ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="Enter your email"
+              placeholder="Enter your username"
             />
-            {errors.email && (
-              <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+            {errors.username && (
+              <p className="mt-1 text-sm text-red-600">{errors.username}</p>
             )}
           </div>
 

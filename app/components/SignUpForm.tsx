@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { apiClient } from '@/lib/api';
 
 const SignUpForm = () => {
   const router = useRouter();
@@ -16,7 +17,8 @@ const SignUpForm = () => {
     username: '',
     password: '',
     confirmPassword: '',
-    email: ''
+    email: '',
+    phone: ''
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -33,7 +35,7 @@ const SignUpForm = () => {
     'Hyderabad'
   ];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
 
@@ -55,26 +57,55 @@ const SignUpForm = () => {
   const checkUsernameAvailability = async (username: string) => {
     if (username.length < 3) {
       setUsernameAvailable(true);
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.username;
+        return newErrors;
+      });
       return;
     }
 
     setCheckingUsername(true);
-    // Simulate API call to check username availability
-    await new Promise(resolve => setTimeout(resolve, 500));
 
-    // In a real app, this would be an API call to your backend
-    // For now, we'll simulate by checking against a mock list
-    const mockExistingUsernames = ['john123', 'jane456', 'admin', 'user123'];
-    const isAvailable = !mockExistingUsernames.includes(username);
+    try {
+      // Make a real API call to check if username is taken using the new endpoint
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/users/check-username/${username}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-    setUsernameAvailable(isAvailable);
-    setCheckingUsername(false);
+      if (response.ok) {
+        const data = await response.json();
+        const isAvailable = data.available;
+        setUsernameAvailable(isAvailable);
 
-    if (!isAvailable && username === formData.username) {
-      setErrors(prev => ({
-        ...prev,
-        username: 'Username already exists. Please choose another.'
-      }));
+        if (!isAvailable && username === formData.username) {
+          setErrors(prev => ({
+            ...prev,
+            username: 'Username already exists. Please choose another.'
+          }));
+        } else if (isAvailable && formData.username === username) {
+          // Clear the error if username becomes available
+          setErrors(prev => {
+            const newErrors = { ...prev };
+            delete newErrors.username;
+            return newErrors;
+          });
+        }
+      } else {
+        // If the API call fails, assume the username is available to avoid blocking user
+        // but show a general error
+        console.error('Failed to check username availability');
+        setUsernameAvailable(true);
+      }
+    } catch (error) {
+      console.error('Error checking username availability:', error);
+      // If there's an error, assume the username is available to avoid blocking user
+      setUsernameAvailable(true);
+    } finally {
+      setCheckingUsername(false);
     }
   };
 
@@ -157,6 +188,17 @@ const SignUpForm = () => {
       }
     }
 
+    // Validate phone number - exactly 11 digits
+    if (!formData.phone) {
+      newErrors.phone = 'Phone number is required';
+    } else {
+      // Remove any non-digit characters to check length
+      const digitsOnly = formData.phone.replace(/\D/g, '');
+      if (digitsOnly.length !== 11) {
+        newErrors.phone = 'Phone number must be exactly 11 digits';
+      }
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -171,16 +213,41 @@ const SignUpForm = () => {
     setIsLoading(true);
 
     try {
-      // In a real app, this would be an API call to your backend
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Prepare user data for API following the exact schema required by the backend
+      // Convert date format from MM/DD/YY to YYYY-MM-DD
+      let convertedDate = formData.dateOfBirth;
+      if (formData.dateOfBirth) {
+        const [month, day, year] = formData.dateOfBirth.split('/');
+        convertedDate = `20${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+      }
 
-      // For demo purposes, we'll just redirect to login
+      const userData = {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        first_name: formData.firstName,  // Backend expects snake_case
+        last_name: formData.lastName,    // Backend expects snake_case
+        date_of_birth: convertedDate,    // Backend expects date in YYYY-MM-DD format
+        phone: formData.phone,           // User-provided phone number
+        address: formData.address,       // User's address
+        // Role is optional and defaults to "customer" on the backend
+      };
+
+      // Register user via API - using the correct endpoint from OpenAPI spec
+      const newUser = await apiClient.publicRequest('/api/v1/users/', {
+        method: 'POST',
+        body: JSON.stringify(userData),
+      });
+
+      // Auto-login the user after successful signup
+      const { access_token } = await apiClient.login(formData.username, formData.password);
+
+      // Redirect to login page after successful signup
       router.push('/login');
       router.refresh();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Sign up error:', error);
-      setErrors({ submit: 'An error occurred during sign up. Please try again.' });
+      setErrors({ submit: error.message || 'An error occurred during sign up. Please try again.' });
     } finally {
       setIsLoading(false);
     }
@@ -256,6 +323,25 @@ const SignUpForm = () => {
               />
               {errors.address && (
                 <p className="mt-1 text-sm text-red-600">{errors.address}</p>
+              )}
+            </div>
+
+            {/* Phone Number */}
+            <div className="md:col-span-2">
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                Phone Number (11 digits) *
+              </label>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={handleChange}
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition ${errors.phone ? 'border-red-500' : 'border-gray-300'}`}
+                placeholder="Enter 11-digit phone number (e.g., 03001234567)"
+              />
+              {errors.phone && (
+                <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
               )}
             </div>
 

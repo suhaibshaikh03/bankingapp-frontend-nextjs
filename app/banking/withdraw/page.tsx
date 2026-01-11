@@ -1,5 +1,176 @@
-export default function Withdraw(){
-    return(
-        <div></div>
-    )
+'use client';
+
+import { useState } from 'react';
+import { useAuth } from '../../../components/auth/AuthProvider';
+
+export default function WithdrawPage() {
+  const { authState } = useAuth();
+  const [formData, setFormData] = useState({
+    account_no: '',
+    username: authState.user?.username || '',
+    password: '',
+    amount: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setMessage('');
+
+    try {
+      const response = await fetch('http://localhost:8000/api/v1/withdraw/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authState.token}`
+        },
+        body: JSON.stringify({
+          account_no: parseInt(formData.account_no),
+          username: formData.username,
+          password: formData.password,
+          amount: parseFloat(formData.amount)
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage(data.message || 'Withdrawal successful!');
+        // Reset form
+        setFormData({
+          account_no: '',
+          username: authState.user?.username || '',
+          password: '',
+          amount: ''
+        });
+      } else {
+        setError(data.detail || 'Withdrawal failed');
+      }
+    } catch (err) {
+      setError('An error occurred while processing the withdrawal');
+      console.error('Withdrawal error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!authState.isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="bg-white p-8 rounded-lg shadow-md text-center">
+          <h2 className="text-xl font-semibold mb-4">Access Denied</h2>
+          <p>Please log in to access this page.</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
+        <h1 className="text-3xl font-bold text-center text-[#00008B] mb-8">Withdraw Funds</h1>
+
+        {message && (
+          <div className="mb-6 p-4 bg-green-100 text-green-700 rounded-md">
+            {message}
+          </div>
+        )}
+
+        {error && (
+          <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-md">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="account_no" className="block text-sm font-medium text-gray-700 mb-1">
+              Account Number
+            </label>
+            <input
+              type="text"
+              id="account_no"
+              name="account_no"
+              value={formData.account_no}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00008B]"
+              placeholder="Enter account number"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00008B]"
+              placeholder="Enter username"
+              readOnly
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00008B]"
+              placeholder="Enter password"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">
+              Amount to Withdraw
+            </label>
+            <input
+              type="number"
+              id="amount"
+              name="amount"
+              value={formData.amount}
+              onChange={handleChange}
+              required
+              min="0.01"
+              step="0.01"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00008B]"
+              placeholder="Enter amount"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-[#00008B] text-white py-3 rounded-md hover:bg-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? 'Processing...' : 'Withdraw'}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 }

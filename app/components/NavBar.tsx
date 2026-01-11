@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import React from 'react'
 import Button from './Button'
-import { Menu, ChevronDown } from 'lucide-react'
+import { Menu, ChevronDown, User } from 'lucide-react'
 import {
   Sheet,
   SheetContent,
@@ -11,12 +11,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/app/components/ui/sheet"
+import { useAuth } from "../../components/auth/AuthProvider";
 
 interface NavBarProps {
   setIsDropdownHovered?: (isHovered: boolean) => void;
 }
 
 function NavBar({ setIsDropdownHovered }: NavBarProps){
+    const { authState, logout } = useAuth();
+
     const menuItems = [
       { text: "Home", href: "/" },
       {
@@ -44,8 +47,8 @@ function NavBar({ setIsDropdownHovered }: NavBarProps){
           { text: "Top-Ups", href: "/payments/top-ups" }
         ]
       },
-      { text: "Contact Us", href: "/contact-us" },
-      { text: "Login", href: "/login" }
+      { text: "Transaction History", href: "/banking/history" },
+      { text: "Contact Us", href: "/contact-us" }
     ];
 
     // Function to handle mouse enter for dropdown buttons
@@ -61,6 +64,43 @@ function NavBar({ setIsDropdownHovered }: NavBarProps){
         setIsDropdownHovered(false);
       }
     };
+
+    // Desktop logout dropdown component
+    const DesktopLogoutDropdown = () => (
+      <div className="relative group">
+        <button className="flex items-center space-x-1 text-white bg-[#00008B] hover:bg-blue-700 font-medium px-4 py-2 rounded-md transition-colors">
+          <User className="h-4 w-4" />
+          <span>{authState.user?.firstName || 'User'}</span>
+          <ChevronDown className="h-4 w-4 ml-1" />
+        </button>
+        <div className="absolute right-0 mt-1 w-48 bg-white border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200 z-50">
+          <button
+            onClick={logout}
+            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    );
+
+    // Mobile logout dropdown component
+    const MobileLogoutSection = () => (
+      <div className="pb-4 border-b border-gray-200">
+        <div className="flex items-center justify-between mb-2 p-2 bg-gray-100 rounded-md">
+          <div className="flex items-center space-x-2">
+            <User className="h-5 w-5 text-[#00008B]" />
+            <span className="font-medium">{authState.user?.firstName || 'User'}</span>
+          </div>
+          <button
+            onClick={logout}
+            className="text-red-600 hover:text-red-800 text-sm font-medium"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    );
 
     return(
              <nav className="flex items-center justify-between w-full px-4 py-1 shadow-md relative">
@@ -115,13 +155,18 @@ function NavBar({ setIsDropdownHovered }: NavBarProps){
                         </ul>
                       </div>
                     </li>
+                    <li className="text-lg font-medium"><Button text="Transaction History" asLink={true} href="/banking/history" className="hover:text-white hover:bg-[#00008B] transition-colors duration-200" /></li>
                     <li className="text-lg font-medium"><Button text="Contact Us" asLink={true} href="/contact-us" className="hover:text-white hover:bg-[#00008B] transition-colors duration-200" /></li>
                 </ul>
               </div>
 
-              {/* DESKTOP LOGIN BUTTON - Hidden on mobile */}
+              {/* DESKTOP AUTHENTICATION SECTION - Hidden on mobile */}
               <div className="hidden md:block">
-                <Button text="Login" asLink={true} href="/login" className="text-white bg-[#00008B] hover:bg-blue-700 font-medium" />
+                {authState.isAuthenticated ? (
+                  <DesktopLogoutDropdown />
+                ) : (
+                  <Button text="Login" asLink={true} href="/login" className="text-white bg-[#00008B] hover:bg-blue-700 font-medium" />
+                )}
               </div>
 
               {/* MOBILE MENU */}
@@ -137,10 +182,14 @@ function NavBar({ setIsDropdownHovered }: NavBarProps){
                       <SheetTitle className="text-lg font-bold">Menu</SheetTitle>
                     </SheetHeader>
                     <div className="flex flex-col pt-4 space-y-2">
-                      <div className="pb-4 border-b border-gray-200">
-                        <Button text="Login" asLink={true} href="/login" className="text-white bg-[#00008B] hover:bg-blue-700 font-medium w-full py-2 px-3 rounded-md ml-0.5" />
-                      </div>
-                      {menuItems.filter(item => item.text !== "Login").map((item, index) => (
+                      {authState.isAuthenticated ? (
+                        <MobileLogoutSection />
+                      ) : (
+                        <div className="pb-4 border-b border-gray-200">
+                          <Button text="Login" asLink={true} href="/login" className="text-white bg-[#00008B] hover:bg-blue-700 font-medium w-full py-2 px-3 rounded-md ml-0.5" />
+                        </div>
+                      )}
+                      {menuItems.map((item, index) => (
                         item.subItems ? (
                           <details key={index} className="pb-1 group">
                             <summary className="flex items-center w-full list-none cursor-pointer">

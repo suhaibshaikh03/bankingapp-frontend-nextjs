@@ -7,5 +7,6 @@
       "Bash(npm install --save-dev cross-env)",
       "Bash(npm run dev)"
     ]
-  }
+  },
+  "enableAllProjectMcpServers": false
 }
