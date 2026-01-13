@@ -25,6 +25,7 @@ const SignUpForm = () => {
   const [usernameAvailable, setUsernameAvailable] = useState(true);
   const [checkingUsername, setCheckingUsername] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
   const branches = [
     'Karachi',
@@ -68,37 +69,24 @@ const SignUpForm = () => {
     setCheckingUsername(true);
 
     try {
-      // Make a real API call to check if username is taken using the new endpoint
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/users/check-username/${username}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      // Make a real API call to check if username is taken using the API client
+      const response = await apiClient.publicRequest(`/users/check-username/${username}`);
 
-      if (response.ok) {
-        const data = await response.json();
-        const isAvailable = data.available;
-        setUsernameAvailable(isAvailable);
+      const isAvailable = response.available;
+      setUsernameAvailable(isAvailable);
 
-        if (!isAvailable && username === formData.username) {
-          setErrors(prev => ({
-            ...prev,
-            username: 'Username already exists. Please choose another.'
-          }));
-        } else if (isAvailable && formData.username === username) {
-          // Clear the error if username becomes available
-          setErrors(prev => {
-            const newErrors = { ...prev };
-            delete newErrors.username;
-            return newErrors;
-          });
-        }
-      } else {
-        // If the API call fails, assume the username is available to avoid blocking user
-        // but show a general error
-        console.error('Failed to check username availability');
-        setUsernameAvailable(true);
+      if (!isAvailable && username === formData.username) {
+        setErrors(prev => ({
+          ...prev,
+          username: 'Username already exists. Please choose another.'
+        }));
+      } else if (isAvailable && formData.username === username) {
+        // Clear the error if username becomes available
+        setErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors.username;
+          return newErrors;
+        });
       }
     } catch (error) {
       console.error('Error checking username availability:', error);
@@ -233,18 +221,20 @@ const SignUpForm = () => {
         // Role is optional and defaults to "customer" on the backend
       };
 
-      // Register user via API - using the correct endpoint from OpenAPI spec
-      const newUser = await apiClient.publicRequest('/api/v1/users/', {
-        method: 'POST',
-        body: JSON.stringify(userData),
-      });
+      // Register user via API using the centralized register method
+      const newUser = await apiClient.register(userData);
 
       // Auto-login the user after successful signup
       const { access_token } = await apiClient.login(formData.username, formData.password);
 
-      // Redirect to login page after successful signup
-      router.push('/login');
-      router.refresh();
+      // Show success message and redirect to login page after a short delay
+      setMessage('Account created successfully! Please login to continue.');
+
+      // Wait a moment to show the message, then redirect
+      setTimeout(() => {
+        router.push('/login');
+        router.refresh();
+      }, 2000);
     } catch (error: any) {
       console.error('Sign up error:', error);
       setErrors({ submit: error.message || 'An error occurred during sign up. Please try again.' });
@@ -489,6 +479,10 @@ const SignUpForm = () => {
 
           {errors.submit && (
             <div className="text-red-600 text-sm text-center">{errors.submit}</div>
+          )}
+
+          {message && (
+            <div className="text-green-600 text-sm text-center font-medium">{message}</div>
           )}
 
           <div className="flex flex-col items-center">
