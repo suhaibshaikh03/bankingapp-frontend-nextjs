@@ -3,6 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   experimental: {
     typedRoutes: true,
+    // Add turbopack config to address the error
+    turbopack: {},
   },
   images: {
     domains: ['images.unsplash.com', 'avatars.githubusercontent.com', 'lh3.googleusercontent.com'],
