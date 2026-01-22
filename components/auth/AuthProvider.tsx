@@ -127,7 +127,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       let user = getUserFromToken(tokenData.accessToken);
 
       // Then fetch the full user profile from the API to ensure all fields are populated
-      const apiUserResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/users/me`, {
+      const apiUserResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://suhaibshaikh03-baningapp-backend.hf.space/'}/users/me`, {
         headers: {
           'Authorization': `Bearer ${tokenData.accessToken}`,
           'Content-Type': 'application/json',

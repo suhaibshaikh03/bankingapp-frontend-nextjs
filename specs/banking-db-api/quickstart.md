@@ -100,14 +100,14 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 
 ### Connecting Frontend to Backend
 1. Ensure CORS is configured in FastAPI to allow requests from http://localhost:3000
-2. Set up API client in Next.js to make requests to http://localhost:8000
+2. Set up API client in Next.js to make requests to https://suhaibshaikh03-baningapp-backend.hf.space/
 3. Handle JWT tokens for authentication
 
 ### Example API Call from Frontend
 ```javascript
 // Example login call
 const login = async (credentials) => {
-  const response = await fetch('http://localhost:8000/auth/login', {
+  const response = await fetch('https://suhaibshaikh03-baningapp-backend.hf.space/auth/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
