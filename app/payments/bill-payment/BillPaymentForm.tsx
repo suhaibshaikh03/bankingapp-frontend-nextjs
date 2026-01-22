@@ -33,7 +33,7 @@ export default function BillPaymentForm() {
     setMessage('');
 
     try {
-      const data: any = await apiClient.request('/banking/bills/payment/', {
+      const data = await apiClient.request<any>('/banking/bills/payment/', {
         method: 'POST',
         body: JSON.stringify({
           bill_no: formData.bill_no,
@@ -71,7 +71,7 @@ export default function BillPaymentForm() {
     }
 
     try {
-      const response: any = await apiClient.request(`/banking/bills/reference/${billNumber}`);
+      const response = await apiClient.request<any>(`/banking/bills/reference/${billNumber}`);
 
       setFormData(prev => ({
         ...prev,

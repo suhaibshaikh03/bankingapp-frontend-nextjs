@@ -29,7 +29,7 @@ export default function ContactUsForm() {
     setMessage('');
 
     try {
-      const response: any = await apiClient.request('/contact-us/', {
+      const response = await apiClient.request<any>('/contact-us/', {
         method: 'POST',
         body: JSON.stringify(formData)
       });

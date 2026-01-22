@@ -33,7 +33,7 @@ export default function TopUpsForm() {
     setMessage('');
 
     try {
-      const data: any = await apiClient.request('/banking/topups/', {
+      const data = await apiClient.request<any>('/banking/topups/', {
         method: 'POST',
         body: JSON.stringify({
           mobile_number: formData.mobile_number,
