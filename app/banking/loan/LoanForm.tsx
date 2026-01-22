@@ -33,7 +33,7 @@ export default function LoanForm() {
     setMessage('');
 
     try {
-      const data = await apiClient.request('/banking/loans/request/', {
+      const data: any = await apiClient.request('/banking/loans/request/', {
         method: 'POST',
         body: JSON.stringify({
           loan_type: formData.loan_type,

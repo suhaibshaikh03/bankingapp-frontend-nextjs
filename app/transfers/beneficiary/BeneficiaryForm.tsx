@@ -36,7 +36,7 @@ export default function BeneficiaryForm() {
     try {
       if (operation === 'add') {
         // Use the manage endpoint for adding beneficiaries (same as deletion)
-        const data = await apiClient.request('/banking/beneficiaries/manage/', {
+        const data: any = await apiClient.request('/banking/beneficiaries/manage/', {
           method: 'POST',
           body: JSON.stringify({
             recipient_name: formData.name,
@@ -50,7 +50,7 @@ export default function BeneficiaryForm() {
         setMessage(data.message || 'Beneficiary added successfully!');
       } else {
         // For deletion, use the manage endpoint
-        const data = await apiClient.request('/banking/beneficiaries/manage/', {
+        const data: any = await apiClient.request('/banking/beneficiaries/manage/', {
           method: 'POST',
           body: JSON.stringify({
             beneficiary_account_no: formData.account_number,
@@ -106,7 +106,7 @@ export default function BeneficiaryForm() {
     setMessage('');
 
     try {
-      const data = await apiClient.request('/banking/beneficiaries/manage/', {
+      const data: any = await apiClient.request('/banking/beneficiaries/manage/', {
         method: 'POST',
         body: JSON.stringify({
           beneficiary_account_no: beneficiaryId,

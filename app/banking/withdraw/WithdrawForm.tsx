@@ -33,7 +33,7 @@ export default function WithdrawForm() {
     setMessage('');
 
     try {
-      const data = await apiClient.request('/banking/withdrawals/', {
+      const data: any = await apiClient.request('/banking/withdrawals/', {
         method: 'POST',
         body: JSON.stringify({
           account_no: parseInt(formData.account_no),

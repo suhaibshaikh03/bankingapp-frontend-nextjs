@@ -33,7 +33,7 @@ export default function DepositForm() {
     setMessage('');
 
     try {
-      const data = await apiClient.request('/banking/deposits/', {
+      const data: any = await apiClient.request('/banking/deposits/', {
         method: 'POST',
         body: JSON.stringify({
           account_no: formData.account_no,

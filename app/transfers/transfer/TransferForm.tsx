@@ -35,7 +35,7 @@ export default function TransferForm() {
     setMessage('');
 
     try {
-      const data = await apiClient.request('/banking/transfers/', {
+      const data: any = await apiClient.request('/banking/transfers/', {
         method: 'POST',
         body: JSON.stringify({
           target_account_number: formData.target_account_number,
