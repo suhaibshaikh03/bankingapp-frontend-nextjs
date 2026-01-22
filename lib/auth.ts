@@ -67,10 +67,10 @@ export const getUserFromToken = (token: string | null) => {
 
     const payload = JSON.parse(atob(tokenParts[1]));
     return {
-      id: payload.userId || payload.sub || payload.id,
-      username: payload.username,
+      id: payload.user_id || payload.sub || payload.id,
+      username: payload.sub, // sub contains the username
       email: payload.email,
-      firstName: payload.firstName || payload.first_name || payload.name || payload.sub || 'User',
+      firstName: payload.firstName || payload.first_name || payload.name || 'User',
     };
   } catch (error) {
     console.error('Error getting user from token:', error);
@@ -79,43 +79,11 @@ export const getUserFromToken = (token: string | null) => {
 };
 
 // Function to refresh the access token using the refresh token
+// Note: The backend doesn't currently support refresh tokens, so this function returns null
 export const refreshToken = async (): Promise<string | null> => {
-  if (typeof window === 'undefined') {
-    return null;
-  }
-
-  const refreshToken = localStorage.getItem('refreshToken');
-  if (!refreshToken) {
-    return null;
-  }
-
-  try {
-    // Refresh token using the backend API
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://suhaibshaikh03-baningapp-backend.hf.space/'}/auth/refresh`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ refresh_token: refreshToken }),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      // Save the new tokens
-      localStorage.setItem('accessToken', data.accessToken);
-      if (data.refreshToken) {
-        localStorage.setItem('refreshToken', data.refreshToken);
-      }
-      return data.accessToken;
-    } else {
-      // If refresh fails, remove tokens and return null
-      removeToken();
-      return null;
-    }
-  } catch (error) {
-    console.error('Error refreshing token:', error);
-    return null;
-  }
+  // Since the backend doesn't support refresh tokens, we return null
+  // This means users will need to log in again when their token expires
+  return null;
 };
 
 // Function to check if a token is about to expire (within 5 minutes)

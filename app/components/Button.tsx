@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { UrlObject } from 'url';
 
 interface ButtonProps {
   children?: React.ReactNode;
@@ -8,7 +9,7 @@ interface ButtonProps {
   onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
-  href?: string; // For navigation links
+  href?: string | UrlObject; // For navigation links
   asLink?: boolean; // To indicate if this should render as a Link component
   external?: boolean; // For external links
 }
@@ -28,9 +29,11 @@ const Button: React.FC<ButtonProps> = ({
 
   if (asLink && href) {
     if (external) {
+      // Convert UrlObject to string if needed for external links
+      const hrefString = typeof href === 'string' ? href : JSON.stringify(href);
       return (
         <a
-          href={href}
+          href={hrefString}
           className={baseClasses}
           onClick={onClick}
           target="_blank"

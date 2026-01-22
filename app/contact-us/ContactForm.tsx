@@ -7,7 +7,7 @@ import { apiClient } from '@/lib/api';
 export default function ContactForm() {
   const { authState } = useAuth();
   const [formData, setFormData] = useState({
-    name: authState.user?.first_name || authState.user?.firstName || '',
+    name: authState.user?.firstName || '',
     email: authState.user?.email || '',
     subject: '',
     message: ''
@@ -39,7 +39,7 @@ export default function ContactForm() {
 
       // Reset form
       setFormData({
-        name: authState.user?.first_name || authState.user?.firstName || '',
+        name: authState.user?.firstName || '',
         email: authState.user?.email || '',
         subject: '',
         message: ''

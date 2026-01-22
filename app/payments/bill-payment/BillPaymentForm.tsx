@@ -91,9 +91,12 @@ export default function BillPaymentForm() {
   const fetchUserBills = async () => {
     try {
       const data = await apiClient.getBills();
-      setBills(data || []);
+      // Check if data is an array before setting state
+      setBills(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Error fetching bills:', err);
+      // Set empty array on error to avoid undefined state
+      setBills([]);
     }
   };
 

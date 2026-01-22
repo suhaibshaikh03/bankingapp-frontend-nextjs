@@ -16,6 +16,7 @@ export interface AuthState {
     username?: string;
     email?: string;
     firstName?: string;
+    roles?: string[];
   };
   isLoading: boolean;
 }

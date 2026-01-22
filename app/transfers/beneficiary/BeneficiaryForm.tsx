@@ -83,9 +83,12 @@ export default function BeneficiaryForm() {
   const fetchBeneficiaries = async () => {
     try {
       const data = await apiClient.getBeneficiaries();
-      setBeneficiaries(data || []);
+      // Check if data is an array before setting state
+      setBeneficiaries(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Error fetching beneficiaries:', err);
+      // Set empty array on error to avoid undefined state
+      setBeneficiaries([]);
     }
   };
 

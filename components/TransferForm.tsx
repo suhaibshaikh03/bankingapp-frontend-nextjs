@@ -32,7 +32,8 @@ const TransferForm: React.FC = () => {
     const fetchUserBalance = async () => {
       if (authState.isAuthenticated) {
         try {
-          const accounts = await apiClient.getAccounts();
+          const data = await apiClient.getAccounts();
+          const accounts = Array.isArray(data) ? data : [];
           const totalBalance = accounts.reduce((sum: number, account: any) => sum + account.balance, 0);
           setCurrentUserBalance(totalBalance);
         } catch (error) {
@@ -108,7 +109,8 @@ const TransferForm: React.FC = () => {
       await apiClient.login(formData.username, formData.password);
 
       // Get user's accounts to find the source account
-      const userAccounts = await apiClient.getAccounts();
+      const data = await apiClient.getAccounts();
+      const userAccounts = Array.isArray(data) ? data : [];
 
       if (userAccounts.length === 0) {
         throw new Error('No accounts found for this user');
@@ -146,7 +148,8 @@ const TransferForm: React.FC = () => {
 
       // Refresh balance
       if (authState.isAuthenticated) {
-        const accounts = await apiClient.getAccounts();
+        const data = await apiClient.getAccounts();
+        const accounts = Array.isArray(data) ? data : [];
         const totalBalance = accounts.reduce((sum: number, account: any) => sum + account.balance, 0);
         setCurrentUserBalance(totalBalance);
       }

@@ -173,9 +173,9 @@ class ApiClient {
       const response = await this.request('/banking/history/');
 
       // Calculate running balance for each transaction
-      let runningBalance = response.current_balance;
+      let runningBalance = (response as any).current_balance;
       // Sort transactions by date descending to calculate backwards
-      const sortedTransactions = [...response.transactions].sort((a, b) =>
+      const sortedTransactions = [...(response as any).transactions].sort((a: any, b: any) =>
         new Date(b.date).getTime() - new Date(a.date).getTime()
       );
 
@@ -201,7 +201,7 @@ class ApiClient {
       }).reverse(); // Reverse back to chronological order (oldest first)
 
       return {
-        currentBalance: response.current_balance,
+        currentBalance: (response as any).current_balance,
         transactions: transactionsWithBalance,
       };
     } catch (error) {
@@ -228,7 +228,7 @@ class ApiClient {
 
   // Get loans
   async getLoans() {
-    return this.request('/loans/');
+    return this.request('/banking/loans/user-loans/');
   }
 
   // Create loan
@@ -241,7 +241,7 @@ class ApiClient {
 
   // Get beneficiaries
   async getBeneficiaries() {
-    return this.request('/beneficiaries/');
+    return this.request('/banking/beneficiaries/user-beneficiaries/');
   }
 
   // Create beneficiary
@@ -254,7 +254,7 @@ class ApiClient {
 
   // Get mobile top-ups
   async getMobileTopUps() {
-    return this.request('/banking/topups/');
+    return this.request('/mobile-topups/');
   }
 
   // Create mobile top-up
@@ -267,7 +267,7 @@ class ApiClient {
 
   // Get bills
   async getBills() {
-    return this.request('/bills/');
+    return this.request('/banking/bills/user-bills/');
   }
 
   // Create bill

@@ -64,9 +64,12 @@ export default function LoanForm() {
   const fetchUserLoans = async () => {
     try {
       const data = await apiClient.getLoans();
-      setLoans(data || []);
+      // Check if data is an array before setting state
+      setLoans(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Error fetching loans:', err);
+      // Set empty array on error to avoid undefined state
+      setLoans([]);
     }
   };
 

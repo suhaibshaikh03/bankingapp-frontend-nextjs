@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api';
 import { useAuth } from '../../components/auth/AuthProvider';
+import { AuthToken } from '@/types/auth';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -46,8 +47,31 @@ const LoginForm = () => {
       // Use the API client to login with username and password
       const { access_token, token_type } = await apiClient.login(username, password);
 
+      // Extract user info from the token to create a complete AuthToken object
+      const tokenParts = access_token.split('.');
+      let userId = '';
+      let expiryTime = 0;
+
+      if (tokenParts.length === 3) {
+        try {
+          const payload = JSON.parse(atob(tokenParts[1]));
+          userId = payload.userId || payload.sub || payload.id || '';
+          expiryTime = payload.exp || 0;
+        } catch (error) {
+          console.error('Error parsing token:', error);
+        }
+      }
+
+      // Create a complete AuthToken object
+      const authToken: AuthToken = {
+        accessToken: access_token,
+        refreshToken: undefined, // The API might not return a refresh token immediately
+        expiryTime,
+        userId,
+      };
+
       // Login successful, update auth context
-      await login({ accessToken: access_token });
+      await login(authToken);
 
       // Redirect to banking history page after login
       router.push('/banking/history');

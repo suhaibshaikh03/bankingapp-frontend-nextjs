@@ -70,7 +70,7 @@ const SignUpForm = () => {
 
     try {
       // Make a real API call to check if username is taken using the API client
-      const response = await apiClient.publicRequest(`/users/check-username/${username}`);
+      const response = await apiClient.publicRequest<{available: boolean}>(`/users/check-username/${username}`);
 
       const isAvailable = response.available;
       setUsernameAvailable(isAvailable);

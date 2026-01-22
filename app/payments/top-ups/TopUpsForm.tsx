@@ -64,9 +64,12 @@ export default function TopUpsForm() {
   const fetchUserTopUps = async () => {
     try {
       const data = await apiClient.getMobileTopUps();
-      setTopUps(data || []);
+      // Check if data is an array before setting state
+      setTopUps(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Error fetching top-ups:', err);
+      // Set empty array on error to avoid undefined state
+      setTopUps([]);
     }
   };
 

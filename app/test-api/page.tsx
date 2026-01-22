@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { apiClient } from '@/lib/api';
 
 const TestApiPage: React.FC = () => {
-  const [testResults, setTestResults] = useState<any>({});
+  const [testResults, setTestResults] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
   const testApiConnection = async () => {
@@ -13,7 +13,7 @@ const TestApiPage: React.FC = () => {
       // Test if we can reach the backend
       const response = await fetch('https://suhaibshaikh03-baningapp-backend.hf.space/');
       setTestResults(prev => ({ ...prev, connection: response.ok ? 'Connected to backend' : 'Connection failed' }));
-    } catch (error) {
+    } catch (error: any) {
       setTestResults(prev => ({ ...prev, connection: 'Connection failed: ' + error.message }));
     }
     setLoading(false);
@@ -25,11 +25,11 @@ const TestApiPage: React.FC = () => {
       // Test transactions endpoint (will fail without auth)
       try {
         const transactions = await apiClient.getTransactions();
-        setTestResults(prev => ({ ...prev, transactions: 'Success: Fetched ' + transactions.length + ' transactions' }));
+        setTestResults(prev => ({ ...prev, transactions: 'Success: Fetched ' + (Array.isArray(transactions) ? transactions.length : 0) + ' transactions' }));
       } catch (error: any) {
         setTestResults(prev => ({ ...prev, transactions: 'Expected failure without auth: ' + error.message }));
       }
-    } catch (error) {
+    } catch (error: any) {
       setTestResults(prev => ({ ...prev, transactions: 'Error: ' + error.message }));
     }
     setLoading(false);

@@ -27,7 +27,7 @@ export default function AccountInfoBanner() {
 
       try {
         const data = await apiClient.getAccounts();
-        setAccounts(data);
+        setAccounts(Array.isArray(data) ? data as Account[] : []);
       } catch (err: any) {
         console.error('Error fetching accounts:', err);
         setError(err.message || 'Failed to load account information');

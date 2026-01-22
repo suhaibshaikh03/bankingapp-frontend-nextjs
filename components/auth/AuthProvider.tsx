@@ -44,7 +44,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           setAuthState({
             isAuthenticated: true,
             token: newToken,
-            user,
+            user: user || undefined,
             isLoading: false,
           });
         } else {
@@ -72,7 +72,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setAuthState({
           isAuthenticated: true,
           token,
-          user,
+          user: user || undefined,
           isLoading: false,
         });
       } else if (isTokenExpiringSoon(token)) {
@@ -83,7 +83,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           setAuthState({
             isAuthenticated: true,
             token: newToken,
-            user,
+            user: user || undefined,
             isLoading: false,
           });
         } else {
@@ -149,7 +149,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setAuthState({
         isAuthenticated: true,
         token: tokenData.accessToken,
-        user,
+        user: user || undefined,
         isLoading: false,
       });
     } catch (error) {
@@ -159,7 +159,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setAuthState({
         isAuthenticated: true,
         token: tokenData.accessToken,
-        user,
+        user: user || undefined,
         isLoading: false,
       });
     }

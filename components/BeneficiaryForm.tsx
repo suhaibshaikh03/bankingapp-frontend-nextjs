@@ -34,7 +34,7 @@ const BeneficiaryForm: React.FC = () => {
       if (authState.isAuthenticated) {
         try {
           const data = await apiClient.getBeneficiaries();
-          setBeneficiaries(data);
+          setBeneficiaries(Array.isArray(data) ? data : []);
         } catch (error) {
           console.error('Error fetching beneficiaries:', error);
         }
@@ -151,7 +151,7 @@ const BeneficiaryForm: React.FC = () => {
 
         // Refresh the list
         const updatedBeneficiaries = await apiClient.getBeneficiaries();
-        setBeneficiaries(updatedBeneficiaries);
+        setBeneficiaries(Array.isArray(updatedBeneficiaries) ? updatedBeneficiaries : []);
       } else if (formData.operation === 'delete' && selectedBeneficiaryId) {
         // Delete the beneficiary
         await apiClient.request(`/api/v1/beneficiaries/${selectedBeneficiaryId}`, {
@@ -162,7 +162,7 @@ const BeneficiaryForm: React.FC = () => {
 
         // Refresh the list
         const updatedBeneficiaries = await apiClient.getBeneficiaries();
-        setBeneficiaries(updatedBeneficiaries);
+        setBeneficiaries(Array.isArray(updatedBeneficiaries) ? updatedBeneficiaries : []);
         setSelectedBeneficiaryId(null);
       }
     } catch (error: any) {
