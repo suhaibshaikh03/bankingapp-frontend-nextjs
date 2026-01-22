@@ -43,7 +43,7 @@ export default function WithdrawForm() {
         })
       });
 
-      setMessage(data.message || 'Withdrawal successful!');
+      setMessage(data?.message || 'Withdrawal successful!');
       // Reset form
       setFormData({
         account_no: '',

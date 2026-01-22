@@ -47,7 +47,7 @@ export default function BeneficiaryForm() {
           })
         });
 
-        setMessage(data.message || 'Beneficiary added successfully!');
+        setMessage(data?.message || 'Beneficiary added successfully!');
       } else {
         // For deletion, use the manage endpoint
         const data = await apiClient.request<any>('/banking/beneficiaries/manage/', {
@@ -59,7 +59,7 @@ export default function BeneficiaryForm() {
           })
         });
 
-        setMessage(data.message || 'Beneficiary deleted successfully!');
+        setMessage(data?.message || 'Beneficiary deleted successfully!');
       }
 
       // Reset form
@@ -115,7 +115,7 @@ export default function BeneficiaryForm() {
         })
       });
 
-      setMessage(data.message || 'Beneficiary deleted successfully!');
+      setMessage(data?.message || 'Beneficiary deleted successfully!');
       fetchBeneficiaries();
     } catch (err: any) {
       setError(err.message || 'An error occurred while deleting the beneficiary');

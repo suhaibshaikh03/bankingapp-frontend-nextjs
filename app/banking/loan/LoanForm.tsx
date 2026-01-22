@@ -43,7 +43,7 @@ export default function LoanForm() {
         })
       });
 
-      setMessage(data.message || 'Loan request submitted successfully!');
+      setMessage(data?.message || 'Loan request submitted successfully!');
       // Reset form
       setFormData({
         loan_type: 'car',

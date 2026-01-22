@@ -43,7 +43,7 @@ export default function BillPaymentForm() {
         })
       });
 
-      setMessage(data.message || 'Bill payment successful!');
+      setMessage(data?.message || 'Bill payment successful!');
       // Reset form
       setFormData({
         bill_no: '',
@@ -75,8 +75,8 @@ export default function BillPaymentForm() {
 
       setFormData(prev => ({
         ...prev,
-        bill_amount: response.amount.toString(),
-        bill_type: response.bill_type
+        bill_amount: response?.amount?.toString(),
+        bill_type: response?.bill_type
       }));
     } catch (err) {
       console.error('Error fetching bill details:', err);

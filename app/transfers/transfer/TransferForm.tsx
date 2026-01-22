@@ -45,7 +45,7 @@ export default function TransferForm() {
         })
       });
 
-      setMessage(data.message || 'Transfer successful!');
+      setMessage(data?.message || 'Transfer successful!');
       // Reset form
       setFormData({
         target_account_number: '',

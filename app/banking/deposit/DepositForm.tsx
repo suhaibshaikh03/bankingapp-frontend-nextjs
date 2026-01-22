@@ -44,7 +44,7 @@ export default function DepositForm() {
         })
       });
 
-      setMessage(data.message || 'Deposit successful!');
+      setMessage(data?.message || 'Deposit successful!');
       // Reset form
       setFormData({
         account_no: '',

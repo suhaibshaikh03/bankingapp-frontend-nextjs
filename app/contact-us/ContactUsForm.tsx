@@ -34,7 +34,7 @@ export default function ContactUsForm() {
         body: JSON.stringify(formData)
       });
 
-      setMessage(response.message || 'Your message has been sent successfully!');
+      setMessage(response?.message || 'Your message has been sent successfully!');
 
       // Reset form
       setFormData({

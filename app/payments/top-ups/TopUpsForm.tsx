@@ -43,7 +43,7 @@ export default function TopUpsForm() {
         })
       });
 
-      setMessage(data.message || 'Top-up successful!');
+      setMessage(data?.message || 'Top-up successful!');
       // Reset form
       setFormData({
         mobile_number: '',
