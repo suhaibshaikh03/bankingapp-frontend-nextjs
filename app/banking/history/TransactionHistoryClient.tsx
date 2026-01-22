@@ -213,7 +213,7 @@ const TransactionHistoryClient = () => {
                           {transaction.type === 'credit' ? '+' : '-'}${transaction.amount.toFixed(2)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          ${transaction.balance_after.toFixed(2)}
+                          ${(transaction.balance_after ?? 0).toFixed(2)}
                         </td>
                       </tr>
                     ))}
