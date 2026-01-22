@@ -1,7 +1,7 @@
 import { TransactionHistory } from '../types/transaction';
 
 // Base API URL - will be different in development vs production
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://suhaibshaikh03-baningapp-backend.hf.space/';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://suhaibshaikh03-baningapp-backend.hf.space';
 
 // Create a base API client
 class ApiClient {
