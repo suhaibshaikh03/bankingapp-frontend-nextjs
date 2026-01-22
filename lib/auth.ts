@@ -90,13 +90,13 @@ export const refreshToken = async (): Promise<string | null> => {
   }
 
   try {
-    // In a real implementation, this would make an API call to refresh the token
-    const response = await fetch('/api/auth/refresh', {
+    // Refresh token using the backend API
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://suhaibshaikh03-baningapp-backend.hf.space/'}/auth/refresh`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ refreshToken }),
+      body: JSON.stringify({ refresh_token: refreshToken }),
     });
 
     if (response.ok) {
