@@ -1,1 +1,0 @@
-dont use "use client" in main files as i have to connect backend in the future, if you want to use any client component use it in separate components and import if you want to use in the main files. dont use any client component in main files ok
