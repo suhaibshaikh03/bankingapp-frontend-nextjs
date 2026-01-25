@@ -74,7 +74,7 @@ const LoginForm = () => {
       await login(authToken);
 
       // Redirect to banking history page after login
-      router.push('/banking/history');
+      router.push('/');
       router.refresh();
     } catch (error: any) {
       console.error('Login error:', error);
