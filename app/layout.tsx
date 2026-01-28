@@ -10,6 +10,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "S2Pay",
   description: "Secure payment platform",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({
