@@ -11,7 +11,7 @@ const TestApiPage: React.FC = () => {
     setLoading(true);
     try {
       // Test if we can reach the backend
-      const response = await fetch('https://suhaibshaikh03-baningapp-backend.hf.space/');
+      const response = await fetch('https://bankingapp-backend-580700595487.europe-west1.run.app/');
       setTestResults(prev => ({ ...prev, connection: response.ok ? 'Connected to backend' : 'Connection failed' }));
     } catch (error: any) {
       setTestResults(prev => ({ ...prev, connection: 'Connection failed: ' + error.message }));

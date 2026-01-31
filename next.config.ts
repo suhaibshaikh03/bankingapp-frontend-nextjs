@@ -1,11 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'suhaibshaikh03-baningapp-backend.hf.space',
+        hostname: 'bankingapp-backend-580700595487.europe-west1.run.app',
         port: '',
         pathname: '/**',
       },
@@ -36,7 +37,7 @@ const nextConfig: NextConfig = {
     ],
   },
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://suhaibshaikh03-baningapp-backend.hf.space',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://bankingapp-backend-580700595487.europe-west1.run.app',
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {

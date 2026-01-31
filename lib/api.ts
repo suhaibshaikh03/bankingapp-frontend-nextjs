@@ -1,7 +1,7 @@
 import { TransactionHistory } from '../types/transaction';
 
 // Base API URL - will be different in development vs production
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://suhaibshaikh03-baningapp-backend.hf.space';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://bankingapp-backend-580700595487.europe-west1.run.app';
 
 // Create a base API client
 class ApiClient {
@@ -89,7 +89,7 @@ class ApiClient {
     } catch (error) {
       console.error('Public API request failed:', error);
       if (error instanceof TypeError && error.message.includes('fetch')) {
-        throw new Error('Network error: Unable to reach the server. Please make sure the backend server is running on https://suhaibshaikh03-baningapp-backend.hf.space/');
+        throw new Error('Network error: Unable to reach the server. Please make sure the backend server is running on https://bankingapp-backend-580700595487.europe-west1.run.app/');
       }
       if (error instanceof Error && error.name === 'AbortError') {
         throw new Error('Request timed out: Server took too long to respond');
@@ -145,7 +145,7 @@ class ApiClient {
         throw new Error('Login request timed out: Server took too long to respond');
       }
       if (error instanceof TypeError && error.message.includes('fetch')) {
-        throw new Error('Network error: Unable to reach the server. Please make sure the backend server is running on https://suhaibshaikh03-baningapp-backend.hf.space/');
+        throw new Error('Network error: Unable to reach the server. Please make sure the backend server is running on https://bankingapp-backend-580700595487.europe-west1.run.app/');
       }
       throw error;
     }
